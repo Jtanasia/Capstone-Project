@@ -2,11 +2,11 @@
 
 // <snippet_package>
 // THIS IS SAMPLE CODE ONLY - NOT MEANT FOR PRODUCTION USE
-import { BlobServiceClient, ContainerClient} from '@azure/storage-blob';
+import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 
 const containerName = `tutorial-container`;
 const sasToken = process.env.REACT_APP_STORAGESASTOKEN;
-const storageAccountName = process.env.REACT_APP_STORAGERESOURCENAME; 
+const storageAccountName = process.env.REACT_APP_STORAGERESOURCENAME;
 // </snippet_package>
 
 // <snippet_isStorageConfigured>
@@ -35,10 +35,10 @@ const getBlobsInContainer = async (containerClient: ContainerClient) => {
 // </snippet_getBlobsInContainer>
 
 // <snippet_createBlobInContainer>
-const createBlobInContainer = async (containerClient: ContainerClient, file: File) => {
-  
+const createBlobInContainer = async (containerClient: ContainerClient, file: File, nik: string) => {
+
   // create blobClient for container
-  const blobClient = containerClient.getBlockBlobClient(file.name);
+  const blobClient = containerClient.getBlockBlobClient(nik + "/" + file.name);
 
   // set mimetype as determined from browser with file upload control
   const options = { blobHTTPHeaders: { blobContentType: file.type } };
@@ -49,7 +49,7 @@ const createBlobInContainer = async (containerClient: ContainerClient, file: Fil
 // </snippet_createBlobInContainer>
 
 // <snippet_uploadFileToBlob>
-const uploadFileToBlob = async (file: File | null): Promise<string[]> => {
+const uploadFileToBlob = async (file: File | null, nik: string): Promise<string[]> => {
   if (!file) return [];
 
   // get BlobService = notice `?` is pulled out of sasToken - if created in Azure portal
@@ -64,12 +64,12 @@ const uploadFileToBlob = async (file: File | null): Promise<string[]> => {
   });
 
   // upload file
-  await createBlobInContainer(containerClient, file);
+  await createBlobInContainer(containerClient, file, nik);
 
   // get list of blobs in container
   return getBlobsInContainer(containerClient);
 };
 // </snippet_uploadFileToBlob>
 
-export default uploadFileToBlob;
+export default uploadFileToBlob
 

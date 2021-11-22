@@ -12,6 +12,7 @@ const App = (): JSX.Element => {
 
   // current file to upload into container
   const [fileSelected, setFileSelected] = useState(null);
+  const [nik, setNik] = useState('')
 
   // UI/form management
   const [uploading, setUploading] = useState(false);
@@ -22,12 +23,17 @@ const App = (): JSX.Element => {
     setFileSelected(event.target.files[0]);
   };
 
+  const onChangeNik = (event: any) => {
+    // console.log(event.target.value)
+    setNik(event.target.value)
+  }
+
   const onFileUpload = async () => {
     // prepare UI
     setUploading(true);
 
     // *** UPLOAD TO AZURE STORAGE ***
-    const blobsInContainer: string[] = await uploadFileToBlob(fileSelected);
+    const blobsInContainer: string[] = await uploadFileToBlob(fileSelected, nik);
 
     // prepare UI for results
     setBlobList(blobsInContainer);
@@ -41,10 +47,15 @@ const App = (): JSX.Element => {
   // display form
   const DisplayForm = () => (
     <div>
+      <p>Isi Nik: </p>
+      <input type="text" onChange={onChangeNik} key={'unique' || ''} />
+      <br/>
+      <p>Isi Gambar: </p>
       <input type="file" onChange={onFileChange} key={inputKey || ''} />
+      <br />
       <button type="submit" onClick={onFileUpload}>
         Upload!
-          </button>
+      </button>
     </div>
   )
 
@@ -69,7 +80,7 @@ const App = (): JSX.Element => {
   );
 
   return (
-    <div>
+    <div id='asw'>
       <h1>Upload file to Azure Blob Storage</h1>
       {storageConfigured && !uploading && DisplayForm()}
       {storageConfigured && uploading && <div>Uploading</div>}
