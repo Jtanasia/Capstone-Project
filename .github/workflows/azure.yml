@@ -50,3 +50,4 @@ jobs:
         env: # Add environment variables here
             REACT_APP_STORAGESASTOKEN: ${{secrets.REACT_APP_STORAGESASTOKEN}}
             REACT_APP_STORAGERESOURCENAME: ${{secrets.REACT_APP_STORAGERESOURCENAME}}
+            azure_static_web_apps_api_token: $(deployment_token)
